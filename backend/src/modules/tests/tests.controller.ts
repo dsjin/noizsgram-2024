@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/common/guards/auth.guard'
@@ -14,9 +14,8 @@ import { AuthGuard } from 'src/common/guards/auth.guard'
 @Controller('tests')
 @UseInterceptors(ClassSerializerInterceptor)
 export class TestsController {
-
   @Get()
-  getHello () {
+  getHello() {
     return 'Hello World'
   }
 }
