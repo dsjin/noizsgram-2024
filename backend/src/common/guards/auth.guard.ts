@@ -3,10 +3,14 @@ import {
   ExecutionContext,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { InvalidTokenError, UnauthorizedError, auth } from 'express-oauth2-jwt-bearer'
+import {
+  InvalidTokenError,
+  UnauthorizedError,
+  auth,
+} from 'express-oauth2-jwt-bearer'
 import { promisify } from 'util'
 
 @Injectable()
