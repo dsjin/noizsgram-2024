@@ -4424,11 +4424,6 @@ rxjs@7.8.1, rxjs@^7.5.5, rxjs@^7.8.1:
   dependencies:
     tslib "^2.1.0"
 
-s@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/s/-/s-1.0.0.tgz#cb86fb1063f86b6377ad1652d26a8d9bc7b106ea"
-  integrity sha512-Tz63UXhdEBvvIV6Q0a+AV2Dx1TPq+vVWNYBxyCT9TG0uqn9kySwFTjfq3C1YuGBRwYtt9Tof11L6GCKi88foqw==
-
 safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
