@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -7,12 +7,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
   const document = SwaggerModule.createDocument(
     app,
-    new DocumentBuilder().setTitle('NoizsGram')
-      .setDescription(
-        'The cloned Instagram for education purpose.',
-      )
+    new DocumentBuilder()
+      .setTitle('NoizsGram')
+      .setDescription('The cloned Instagram for education purpose.')
       .addBearerAuth()
-      .build()
+      .build(),
   )
   SwaggerModule.setup('api', app, document)
   app.enableCors()

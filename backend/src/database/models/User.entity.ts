@@ -12,12 +12,12 @@ export class User {
   id: number
   @Column({ unique: true })
   auth0Id: string
-  @Column({ unique: true, length: 30 })
-  username: string
-  @Column({ unique: true, length: 128 })
-  bio: string
+  @Column({ unique: true, length: 30, nullable: true })
+  username: string | null
+  @Column({ length: 128, nullable: true })
+  bio: string | null
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: number
-  @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: number
+  createdAt: Date
+  @UpdateDateColumn({ type: 'timestamptz', nullable: true })
+  updatedAt: Date | null
 }
