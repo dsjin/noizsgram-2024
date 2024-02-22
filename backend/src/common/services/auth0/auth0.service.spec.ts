@@ -81,7 +81,7 @@ describe('Auth0Service', () => {
     })
     it('user not exists', async () => {
       managementClientProvider.users.get.mockRejectedValue({
-        statusCode: 404
+        statusCode: 404,
       })
       await expect(service.getUser('1234567890')).rejects.toThrow(
         'User Not Found',
