@@ -1,12 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { Auth0Service } from './auth0.service'
 import { ApiResponse, GetUsers200ResponseOneOfInner } from 'auth0'
+import * as jsonwebtoken from 'jsonwebtoken'
 import managementClient from './auth0'
 
 interface IAuth0ManagementClient {
   users: {
     get: jest.Mock<any, any, any>
   }
+}
+
+interface IJsonwebtoken {
+  decode: jest.Mock<any, any, any>
 }
 
 jest.mock('auth0', () => {
@@ -22,6 +27,14 @@ jest.mock('auth0', () => {
       }),
   }
 })
+
+jest.mock('jsonwebtoken', () => {
+  return {
+    decode: jest.fn(),
+  }
+})
+
+const jsonwebtokenMock = jsonwebtoken as jest.Mocked<typeof jsonwebtoken>
 
 describe('Auth0Service', () => {
   let service: Auth0Service
@@ -85,6 +98,43 @@ describe('Auth0Service', () => {
       })
       await expect(service.getUser('1234567890')).rejects.toThrow(
         'User Not Found',
+      )
+    })
+  })
+  describe('getDecodedPayload', () => {
+    it('should return decoded payload', async () => {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
+      const returnedValue: jsonwebtoken.JwtPayload = {                                                                                                                     
+        header: { alg: 'HS256', typ: 'JWT' },
+        payload: {
+          iss: 'https://xxx.auth0.com/',
+          sub: 'sub',
+          aud: 'aud',
+          iat: 1709780210,
+          exp: 1709866610,
+          azp: 'azp',
+          gty: 'client-credentials'
+        },
+        signature: 'ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
+      }
+      jsonwebtokenMock.decode.mockReturnValue(returnedValue)
+      expect(service.getDecodedPayload(token)).toEqual(returnedValue)
+      expect(jsonwebtokenMock.decode).toHaveBeenCalledWith(token, {
+        'complete': true
+      })
+    })
+    it('payload decoded failure: string', async () => {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
+      jsonwebtokenMock.decode.mockReturnValue('string')
+      expect(() => service.getDecodedPayload(token)).toThrow(
+        'Payload decoding failed',
+      )
+    })
+    it('payload decoded failure: null', async () => {
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
+      jsonwebtokenMock.decode.mockReturnValue(null)
+      expect(() => service.getDecodedPayload(token)).toThrow(
+        'Payload decoding failed',
       )
     })
   })

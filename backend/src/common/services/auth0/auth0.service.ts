@@ -1,5 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { GetUsers200ResponseOneOfInner, ManagementClient } from 'auth0'
+import { JwtPayload, decode } from 'jsonwebtoken'
 
 @Injectable()
 export class Auth0Service {
@@ -22,5 +23,13 @@ export class Auth0Service {
       }
       throw e
     }
+  }
+
+  public getDecodedPayload(accessToken: string): JwtPayload {
+    const decodedPayload = decode(accessToken, { complete: true })
+    if (!decodedPayload || typeof decodedPayload === 'string') {
+      throw new BadRequestException('Payload decoding failed')
+    }
+    return decodedPayload
   }
 }
