@@ -115,7 +115,7 @@ describe('Auth0Service', () => {
           azp: 'azp',
           gty: 'client-credentials'
         },
-        signature: 'ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
+        signature: 'xxxxx'
       }
       jsonwebtokenMock.decode.mockReturnValue(returnedValue)
       expect(service.getDecodedPayload(token)).toEqual(returnedValue)
