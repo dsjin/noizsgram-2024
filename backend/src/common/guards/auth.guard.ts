@@ -12,6 +12,7 @@ import {
   auth,
 } from 'express-oauth2-jwt-bearer'
 import { promisify } from 'util'
+import { Auth0Service } from '../services/auth0/auth0.service'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,6 +24,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       await validate(req, res)
+      req['user'] = Auth0Service.getDecodedPayload(req.auth.token)
       return true
     } catch (error) {
       if (error instanceof InvalidTokenError) {

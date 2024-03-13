@@ -104,7 +104,7 @@ describe('Auth0Service', () => {
   describe('getDecodedPayload', () => {
     it('should return decoded payload', async () => {
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
-      const returnedValue: jsonwebtoken.JwtPayload = {                                                                                                                     
+      const returnedValue: jsonwebtoken.Jwt = {                                                                                                                     
         header: { alg: 'HS256', typ: 'JWT' },
         payload: {
           iss: 'https://xxx.auth0.com/',
@@ -118,7 +118,7 @@ describe('Auth0Service', () => {
         signature: 'xxxxx'
       }
       jsonwebtokenMock.decode.mockReturnValue(returnedValue)
-      expect(service.getDecodedPayload(token)).toEqual(returnedValue)
+      expect(Auth0Service.getDecodedPayload(token)).toEqual(returnedValue)
       expect(jsonwebtokenMock.decode).toHaveBeenCalledWith(token, {
         'complete': true
       })
@@ -126,14 +126,14 @@ describe('Auth0Service', () => {
     it('payload decoded failure: string', async () => {
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
       jsonwebtokenMock.decode.mockReturnValue('string')
-      expect(() => service.getDecodedPayload(token)).toThrow(
+      expect(() => Auth0Service.getDecodedPayload(token)).toThrow(
         'Payload decoding failed',
       )
     })
     it('payload decoded failure: null', async () => {
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3h4eC5hdXRoMC5jb20vIiwic3ViIjoic3ViIiwiYXVkIjoiYXVkIiwiaWF0IjoxNzA5NzgwMjEwLCJleHAiOjE3MDk4NjY2MTAsImF6cCI6ImF6cCIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.ugfbuOCrjCm8kPlSELcBJda3LadB-GhdMLcluovt32M'
       jsonwebtokenMock.decode.mockReturnValue(null)
-      expect(() => service.getDecodedPayload(token)).toThrow(
+      expect(() => Auth0Service.getDecodedPayload(token)).toThrow(
         'Payload decoding failed',
       )
     })
